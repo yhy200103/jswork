@@ -1,21 +1,23 @@
 <!DOCTYPE html>
 <head>
     <meta charset="utf-8">
-    <title>叶航宇的《javascript web前端开发》课程作业</title>
+    <title>叶航宇的猴子选大王</title>
 </head>
 <body>
-        叶航宇的《javascript web前端开发》课程作业<br>
-    <a href="work1/index.html">work1 开发环境安装</a><br>
-    <a href="work2/index.html">work2 简单网页任务</a><br>
-    <a href="work3/index.html">work3 js基本语法</a><br>
-    <a href="work4/index.html">work4js流程控制</a><br>
-    <a href="work5/index.html">work5 js循环语句程序</a><br>
-    <a href="work6/index.html">work6 阶乘法计算圆周率</a><br>
-    <a href="work7/index.html">work7 冒泡排序和插入排序</a><br>
-    <a href="work7slide/index.html">work7-2 冒泡排序和插入排序动画版</a><br>
-    <a href="work8/index.html">work8 简易计算器</a><br>
-    <a href="work9/index.html">work9 三级联动</a><br>
-    <a href="work10/index.html">work10 猴子选大王</a><br>
-    持续更新中。。。
-</body>
-</html>
+    <div>
+        <p>猴子选大王</p>
+        <p>请输入猴子的总数:<input id="monkeytotal" type="text" value="10"></p>
+        <p>请输入踢出第几只猴子：<input id="monkeykick" type="text" value="7"></p>
+        <p><input type="button" value="选大王" onclick="monkey()"></p>
+        <div id = "monkeyking"></div>
+    </div>
+    <div>
+        <p>统计字符串中字符出现的次数</p>
+        <p>待统计的字符: <input id="str" type="text" value="qaeweezserasrweewa"></p>
+        <p><input type="button" value="统计" onclick="stat()"></p>
+        <div id="result"></div>
+    </div>
+    </body>
+    <script src="index.js"></script>
+    <script src="sasa.js"></script>
+    </html>
