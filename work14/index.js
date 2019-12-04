@@ -22,4 +22,6 @@ function seckill() {
     document.getElementById('h').innerHTML =  h + '时'
     document.getElementById('m').innerHTML =  m + '分'
     document.getElementById('s').innerHTML =  s + '秒'
+  
+   
 }
