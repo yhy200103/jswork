@@ -1,5 +1,13 @@
-.quanbu{
-   
+body{
+    background-image: url(nida.jpg);
+    border-image-repeat: repeat-x;
+ background-size: 10%;
+    
+}
+
+
+.lianjie{
+   opacity: 0.7;
     width: max-content;
     margin: 0 auto;
     padding: 5px;
@@ -14,7 +22,11 @@
     color: chartreuse;
    background-color: blue;
    border-style: solid;
+   position: relative;
+  
 }
+   
+
 
 a:link{
     color: gold;
