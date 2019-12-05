@@ -1,0 +1,29 @@
+.quanbu{
+   
+    width: max-content;
+    margin: 0 auto;
+    padding: 5px;
+    height: max-content;
+    border: 50px;
+    border-top-color: coral;
+    border-left-color: darkgreen ;
+    border-right-color: hotpink;
+    border-radius: 15%;
+    font-size:35px;
+    font-style: oblique;
+    color: chartreuse;
+   background-color: blue;
+   border-style: solid;
+}
+
+a:link{
+    color: gold;
+}
+a:visited{
+    color: gold;
+   
+}
+a:hover{
+color: hotpink;
+text-decoration: underline;
+}
