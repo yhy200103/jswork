@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>自律超人</title>
+        <link rel="shortcut icon" href="tuPian/hangyu.ico" />
+
+	</head>
+	<style>
+		/* 全背景变灰色 */
+		body{
+			padding: 0;
+			margin: 0;
+			background-color: #DDDDDD;
+		}
+		/* 弄隐形盒子居中 */
+		.xia {
+			width: 800px;
+			margin: 0 auto;
+		}
+		footer{
+			width: 250px;
+			position: fixed;
+			right: 40%;
+			transition: all 1s; 		}
+		/* 导航栏样式 */
+		header>section{
+			background-color: #000000;
+			padding: 10px;
+		
+		}
+		label{
+			margin-left:24% ;
+			color: #FFFFFA;
+		}
+		section>input{
+			margin-left: 15%;
+			width: 250px;
+			border-radius: 10px;
+		}
+         ol li{
+			 width: 600px;
+			 background-color: #FFFFFF;
+			 margin: 5px;
+			 border-radius: 5px;
+			 list-style: none;
+         }	
+		ol li a{
+			text-decoration: none;
+			color: #000000;
+			float: right;
+			margin-right: 30px;
+			font-size: 16px;
+			transition: all 1s; 
+			
+			
+		}
+		ol li a:hover{
+			font-size: 18px;
+			transform: rotate(360deg);
+			color:  #FF0000;
+		}
+		ul li{
+			 width: 600px;
+			 background-color: #FFFFFF;
+			 margin: 5px;
+			 border-radius: 5px;
+			 list-style: none;
+			  opacity:0.5;
+		 }	
+		ul li a{
+			text-decoration: none;
+			color: #000000;
+			float: right;
+			margin-right: 30px;
+			font-size: 16px;
+			transition: all 1s; 
+			
+			
+		}
+		ul li a:hover{
+			font-size: 18px;
+			transform: rotate(360deg);
+			color:  #FF0000;
+		}
+		#todocount{
+			
+			width: 20px;
+			height: 20px;
+			margin-right: 180px;
+			float: right
+		}
+		#donecount{
+			width: 20px;
+			height: 20px;
+			margin-right: 180px;
+			float: right
+		}
+               .bianhuan{
+			
+			color: #780116;
+			margin-top: 30px;
+		}
+	</style>
+	<body>
+		<header>
+			<section>
+				<label for="title">ToDoList</label>
+				<input type="text" id="title" name="title" placeholder="添加ToDo" required />
+			</section>
+		</header>
+		<section class="xia">
+			<h2>正在进行 <span id="todocount"></span></h2>
+			<ol id="todolist" class="demo-box">
+				
+			</ol>
+			<h2>已经完成 <span id="donecount"></span></h2>
+			<ul id="donelist">
+				
+			</ul>
+			
+		</section>
+		<footer>
+			Copyright &copy; 2014 todolist.cn
+		</footer>
+		<script src="jquery.min.js"></script>
+		<script>
+			//核心思路:不管是按回车还是点击复选框,都要把数据存到浏览器中
+			//然后再用本地储存的数据加载到页面中
+			//数据储存格式:用数组格式 var a=[{title:'xxx',done:false}]
+			//                         title为显示在下面的内容,done为有无完成
+			var todolist= [{
+				title:'我今天出去玩',
+				done:false
+			},{
+				title:'我今天学习jq',
+				done:true
+			}]
+			                  //因为本地存储只能存储字符串,所以要用JSON.stringify(),转换成字符串
+			// localStorage.setItem('todo',JSON.stringify(todolist));
+			// //将数组取出
+			// var a=localStorage.getItem('todo');
+			// //因为如果转换成字符串储存到本地储存时,拿出来还是字符串的格式,所以又要转换成数组
+			// a=JSON.parse(a);
+			// console.log(a[0]);
+			
+			//事件.key.code能获得键盘的ASCII码值
+			// onkeyup:某个键盘按键被松开时触发
+			// onkeydown:某个键盘按键被按下时触发
+			//1.如果onkeyup是键盘事件,而key.code获取键盘ASCII码
+			//回车的ASCII码为13
+			$(function(){
+				//每次页面一加载就渲染函数
+				load();
+				$('#title').on('keydown',function(e){
+					if(e.keyCode===13){
+						if($(this).val()===''){
+							alert('请输入你想做的事');
+						}else{
+							//读取本地存储原来的数据
+							var local=getDate();
+							//把local数组进行更行,把最新数据给local
+							local.push({title:$(this).val(),done:false});
+							//更行local之后,再把local储存到本地数组里
+							//里面的变量为局部变量,所以要在函数给个接口,再传入数据
+							saveDate(local);
+							//2.回车后本地储存数据渲染到页面
+							load();
+							$(this).val('');
+						}
+					}
+					
+				});
+				//删除操作
+				$('ol,ul').on('click','a',function(){
+					//先获取本地存储
+					var data=getDate();
+					
+					//修改数据
+					//渲染页面的a链接里面加上id='i'
+					var index=$(this).attr('id');//获取自定义索引
+					//用splice(从哪个位置删除，删除几个);
+					//把自定义索引的元素删除
+					data.splice(index,1);
+					//保存本地存储
+					saveDate(data);
+					//重新渲染页面
+					load();
+				})
+				//以及完成操作
+				$('ol,ul').on('click','input',function(){
+					//获取本地存储的数据
+					var data=getDate();
+					//修改数据  复选框的索引号是它的兄弟a链接的索引号,所以不用重复获取
+					var index= $(this).siblings("a").attr("id");
+					data[index].done=$(this).prop('checked');//索引号为index的data,把其done改为当前状态
+					console.log(data);
+					//保存到本地存储
+					saveDate(data);
+					//重新渲染,如果done为true,就把它放到Ul里面,所以要再渲染页面函数重新写判断
+					load();
+				})
+				//因为读取本地储存数据需要用到很多次,所以封装一个函数
+				function getDate(){
+					var data=localStorage.getItem('todolist');
+					if(data !== null){
+						//返回数组
+						return JSON.parse(data);
+					}else{
+						return [];
+					}
+				}
+				//保存本地存储数据
+			    function saveDate(data){
+					                      //储存时记得再将数组传换成字符串
+					localStorage.setItem('todolist',JSON.stringify(data));
+				}
+				function load(){
+					//渲染,把储存的数据放到ol里
+					var data=getDate();//拿到数据
+					//遍历之前清空Ol的元素
+					$('ol,ul').empty();
+					var todoCount=0//正在进行的数统计
+					var doneCount=0//已经完成的数统计
+					//遍历数据
+					$.each(data,function(i,n){
+						//如果done为true,就放到ul
+						//如果为false就放到ol
+						if(n.done){
+							$('ul').prepend("<li><input type='checkbox' checked='checked'>"+n.title+"<a href='javascript:;' id="+i+">x</a></li>")
+							doneCount++;
+						}else{
+							$('ol').prepend("<li><input type='checkbox'>"+n.title+"<a href='javascript:;' id="+i+">x</a></li>")
+							todoCount++;
+						}
+						// $.each($('div'), function(index,ele){
+						// 	//i是每个元素索引号,n是每个DOM元素对象,不是jq对象  
+						            //prepeng追加，因为页面加载完成时会获取信息，回车之后又会   n.title是文本内容
+									//所以每次加载时,要把原有信息删除,再把最新的复制
+							
+					})
+					$('#todocount').text(todoCount);
+					$('#donecount').text(doneCount);
+				}
+                              function bian(){
+					$('footer').toggleClass('bianhuan');
+				}
+				//3.切换类  toggleClass('类名');
+				
+				setInterval(bian,1000);
+
+			})
+		</script>
+	</body>
+</html>
